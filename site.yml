@@ -1,0 +1,26 @@
+---
+#- hosts: all
+#  gather_facts: yes
+#  become: True
+
+#- hosts: load_balancer
+#  roles:
+#    - ha
+#  become: True
+
+#- hosts: backend_node
+#  roles:
+#    - nginx_backend
+#  become: True
+
+#- hosts: storage_gateway
+#  roles:
+#    - blockstore_config
+#    - gluster_minio
+#    - minio
+
+- hosts: galera_cluster_node
+  roles:
+    - galera-cluster
+  become: True
+  
