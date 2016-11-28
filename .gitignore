@@ -9,7 +9,6 @@ group_vars/all/load_balancer
 group_vars/all/keys
 group_vars/all/vars
 host_vars/*
-#modules/*
 storage/*
 roles/*
 .key.txt
