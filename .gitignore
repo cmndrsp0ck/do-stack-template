@@ -6,8 +6,6 @@ site.retry
 *.pyc
 .terraform/
 group_vars/all/load_balancer
-group_vars/all/keys
-group_vars/all/vars
 host_vars/*
 storage/*
 roles/*

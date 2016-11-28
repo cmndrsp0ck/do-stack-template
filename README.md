@@ -42,4 +42,4 @@ When you're ready to begin configuring your Droplets, refer to the documentation
 
 #### Follow-up steps
 
-Keep in mind that this is a very basic setup, but the template files and tasks can easily be altered to suit your needs. If you already have Droplets provisioned, you can import them into Terraform, as well as create an image from it and use the image ID to spin up additional nodes. Any additional configuration can simple by done by creating a simple Ansible role, or modifying the existing one.
+Keep in mind that this is a very basic setup, but the template files and tasks can easily be altered to suit your needs. If you already have Droplets provisioned, you can import them into Terraform, as well as create an image from it and use the image ID to spin up additional nodes. Any additional configuration can simple by done by creating a simple Ansible role, or modifying the existing ones.
