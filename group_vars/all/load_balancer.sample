@@ -1,5 +1,0 @@
-# DigitalOcean access token
-#do_token: "{{ vault_do_token }}"
-
-# Generated ha auth key. Consult README.md for how to generate.
-#ha_auth_key: "{{ vault_ha_auth_key }}"

@@ -1,3 +1,0 @@
-dd if='/dev/urandom' bs=512 count=1 2>'/dev/null' \
-  | openssl sha1 
-  
