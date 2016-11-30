@@ -1,17 +1,17 @@
 ---
 - hosts: all
-  gather_facts: yes
   become: true
+  gather_facts: yes
 
 - hosts: load_balancer
+  become: true
   roles:
     - ansible-haproxy
-  become: true
 
 - hosts: backend_node
+  become: true
   roles:
     - ansible-backend
-  become: true
 
 #- hosts: storage_gateway
 #  roles:
@@ -20,6 +20,6 @@
 #    - minio
 
 - hosts: galera_cluster_node
+  become: true
   roles:
     - ansible-galera-cluster
-  become: true
