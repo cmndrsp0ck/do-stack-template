@@ -10,4 +10,4 @@ host_vars/*
 storage/*
 roles/*
 .key.txt
-.idea/
+.idea/*
