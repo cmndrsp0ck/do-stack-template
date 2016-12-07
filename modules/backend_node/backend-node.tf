@@ -12,7 +12,7 @@ resource "digitalocean_droplet" "backend_node" {
   connection {
     user     = "root"
     type     = "ssh"
-    key_file = "${var.private_key_path}"
+    private_key = "${var.private_key_path}"
     timeout  = "2m"
   }
 }

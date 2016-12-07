@@ -11,7 +11,7 @@ resource "digitalocean_droplet" "galera_cluster_node" {
   connection {
     user     = "root"
     type     = "ssh"
-    key_file = "${var.private_key_path}"
+    private_key = "${var.private_key_path}"
     timeout  = "2m"
   }
 }
