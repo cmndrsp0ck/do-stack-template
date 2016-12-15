@@ -13,7 +13,7 @@ module "loadbalance" {
 
 module "backend-nodes" {
   source           = "./modules/backend_node"
-  node_count       = "4"
+  node_count       = "2"
   node_size        = "1gb"
   project          = "${var.project}"
   region           = "${var.region}"
@@ -32,4 +32,3 @@ module "galera-cluster" {
   ssh_fingerprint  = "${var.ssh_fingerprint}"
   public_key       = "${var.public_key}"
 }
-

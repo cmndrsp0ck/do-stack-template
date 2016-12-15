@@ -3,7 +3,7 @@ variable "node_count" {}
 
 variable "node_size" {
   type    = "string"
-  default = "2gb"
+  default = "1gb"
 }
 
 variable "project" {}

@@ -20,6 +20,11 @@
 #    - minio
 #    - ha
 
+- hosts: galera_lb
+  roles:
+    - ansible-galera-loadbalancer
+  become: true
+
 - hosts: galera_cluster_node
   roles:
     - ansible-galera-cluster

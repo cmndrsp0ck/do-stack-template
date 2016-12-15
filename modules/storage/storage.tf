@@ -19,10 +19,10 @@ resource "digitalocean_droplet" "storage_gateway" {
   volume_ids         = ["${element(digitalocean_volume.storage_volume.*.id, count.index)}"]
 
   connection {
-    user     = "root"
-    type     = "ssh"
+    user        = "root"
+    type        = "ssh"
     private_key = "${var.private_key_path}"
-    timeout  = "2m"
+    timeout     = "2m"
   }
 }
 

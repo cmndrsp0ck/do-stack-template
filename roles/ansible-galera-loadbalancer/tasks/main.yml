@@ -1,0 +1,52 @@
+---
+- name: set up PPA
+  apt_repository:
+    repo: "ppa:vbernat/haproxy-1.6"
+    state: present
+
+- name: install heartbeat and haproxy components
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items:
+    - haproxy
+
+- name: configure rsyslog - load imudp
+  lineinfile:
+    dest: /etc/rsyslog.conf
+    regexp: '#module\(load="imudp"\)'
+    line: 'module(load="imudp")'
+    state: present
+  notify: restart rsyslog
+
+- name: configure rsyslog - set imudp to port 514
+  lineinfile:
+    dest: /etc/rsyslog.conf
+    regexp: '#input\(type="imudp" port="514"\)'
+    line: 'input(type="imudp" port="514")'
+    state: present
+  notify: restart rsyslog
+
+- name: configure haproxy service for galera
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    mode: 0644
+
+- name: enable haproxy
+  lineinfile:
+    dest: /etc/default/haproxy
+    state: present
+    regexp: 'ENABLED=0'
+    line: 'ENABLED=1'
+    owner: root
+    group: root
+    mode: 0644
+
+- name: start haproxy
+  service:
+    name: haproxy
+    state: restarted
+    enabled: yes

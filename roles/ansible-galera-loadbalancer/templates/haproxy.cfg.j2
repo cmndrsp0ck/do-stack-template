@@ -1,0 +1,23 @@
+global
+        log 127.0.0.1   local0 notice
+        user haproxy
+        group haproxy
+        daemon
+        maxconn 4096
+
+defaults
+        log     global
+        retries  2
+        timeout connect 500ms
+        timeout client 5000ms
+        timeout server 5000ms
+
+listen galera
+        bind {{ ansible_eth1.ipv4.address }}:3306
+        balance source
+        mode tcp
+        option tcpka
+        option mysql-check user haproxy
+    {% for host in groups['galera_cluster_node'] %}
+    server {{ hostvars[host]['ansible_hostname'] }} {{ hostvars[host]['ansible_eth1']['ipv4']['address'] }}:3306 check weight 1
+    {% endfor %}

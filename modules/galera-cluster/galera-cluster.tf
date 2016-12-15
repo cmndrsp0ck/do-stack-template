@@ -9,10 +9,27 @@ resource "digitalocean_droplet" "galera_cluster_node" {
   user_data          = "${data.template_file.user_data.rendered}"
 
   connection {
-    user     = "root"
-    type     = "ssh"
+    user        = "root"
+    type        = "ssh"
     private_key = "${var.private_key_path}"
-    timeout  = "2m"
+    timeout     = "2m"
+  }
+}
+
+resource "digitalocean_droplet" "galera_lb" {
+  image              = "${var.image_slug}"
+  name               = "${var.project}-galera-lb"
+  region             = "${var.region}"
+  size               = "1gb"
+  private_networking = true
+  ssh_keys           = ["${split(",",var.keys)}"]
+  user_data          = "${data.template_file.user_data.rendered}"
+
+  connection {
+    user        = "root"
+    type        = "ssh"
+    private_key = "${var.private_key_path}"
+    timeout     = "2m"
   }
 }
 

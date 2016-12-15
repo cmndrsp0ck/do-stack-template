@@ -1,0 +1,6 @@
+---
+# handlers file for galera-loadbalancer
+- name: restart rsyslog
+  service:
+    name: rsyslog
+    state: restarted

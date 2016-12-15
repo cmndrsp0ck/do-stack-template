@@ -10,10 +10,10 @@ resource "digitalocean_droplet" "backend_node" {
   user_data          = "${data.template_file.user_data.rendered}"
 
   connection {
-    user     = "root"
-    type     = "ssh"
+    user        = "root"
+    type        = "ssh"
     private_key = "${var.private_key_path}"
-    timeout  = "2m"
+    timeout     = "2m"
   }
 }
 
