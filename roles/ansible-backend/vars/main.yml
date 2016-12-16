@@ -1,0 +1,9 @@
+#sites:
+#  myapp1:
+#    doc_root: /var/www/html
+#    server_name: example.com www.example.com
+
+sites:
+  myapp1:
+    doc_root: /var/www/html/myapp1
+    server_name: sippin.com wwww.sippin.com

@@ -1,0 +1,30 @@
+---
+# defaults for galera-cluster
+
+galera_server_package: mariadb-server-10.1
+
+galera_cluster_name: galera
+
+galera_bootstrap: False
+
+galera_node_ip: 127.0.0.1
+
+galera_bind_address: 0.0.0.0
+
+galera_manage_users: True
+
+#galera_grant_hosts: []
+
+galera_password_lookup_dir: "storage/galera-cluster/{{ galera_cluster_name }}"
+
+
+# monitor cluster via http
+# @see https://github.com/olafz/percona-clustercheck
+galera_check_scripts: True
+galera_check_scripts_port: 9200
+
+
+# checkuser for haproxy
+galera_haproxy_user: True
+galera_haproxy_hosts:
+  - 127.0.0.1

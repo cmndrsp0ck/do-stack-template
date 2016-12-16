@@ -1,0 +1,5 @@
+---
+galera_root_password: "{{ lookup('password', galera_password_lookup_dir + '/root_pw length=25') }}"
+galera_sys_maint_password: "{{ lookup('password', galera_password_lookup_dir + '/sys_maint_pw length=25') }}"
+galera_clustercheck_password: "{{ lookup('password', galera_password_lookup_dir + '/clustercheck_pw length=25') }}"
+

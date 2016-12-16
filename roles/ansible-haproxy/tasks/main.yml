@@ -1,0 +1,72 @@
+---
+- name: set up PPA
+  apt_repository:
+    repo: "ppa:vbernat/haproxy-1.6"
+    state: present
+
+- name: install heartbeat and haproxy components
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items:
+    - heartbeat
+    - haproxy
+
+- name: configure heartbeat
+  template:
+    src: ha.cf
+    dest: /etc/ha.d/ha.cf
+    mode: 0644
+
+- name: configure authkey
+  template:
+    src: authkeys
+    dest: /etc/ha.d/authkeys
+    mode: 0600
+
+- name: configura haresources
+  template:
+    src: haresources
+    dest: /etc/ha.d/haresources
+
+- name: install floating ip assigner
+  template:
+    src: assign-ip
+    dest: /usr/local/bin/assign-ip
+    mode: 0755
+
+- name: install floating ip manager
+  template:
+    src: floatip
+    dest: /etc/init.d/floatip
+    mode: 0755
+
+- name: start heartbeat service
+  service:
+    name: heartbeat
+    state: started
+    enabled: yes
+
+- name: configure haproxy service
+  template:
+    src: haproxy.cfg
+    dest: /etc/haproxy/haproxy.cfg 
+    mode: 0644
+
+- name: enable haproxy
+  lineinfile:
+    dest: /etc/default/haproxy
+    state: present
+    regexp: 'ENABLED=0'
+    line: 'ENABLED=1'
+    owner: root
+    group: root
+    mode: 0644
+
+- name: start haproxy
+  service:
+    name: haproxy
+    state: restarted
+    enabled: yes
