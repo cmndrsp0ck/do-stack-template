@@ -1,0 +1,54 @@
+---
+- name: install nginx component
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items:
+    - nginx
+
+- name: configure nginx service
+  template:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    mode: 0644
+  notify: restart nginx
+
+- name: get active sites
+  shell:
+    ls -1 /etc/nginx/sites-enabled
+  register: active
+
+- name: disable unwanted sites
+  file:
+    path: /etc/nginx/sites-enabled/{{ item }}
+    state: absent
+  with_items: "{{ active.stdout_lines }}"
+  when: item not in sites
+  notify: restart nginx
+
+- name: create doc roots
+  file:
+    path: "{{ item.value.doc_root }}"
+    state: directory
+    mode: 0755
+    owner: www-data
+    group: www-data
+  with_dict: "{{ sites }}"
+
+- name: configure server block
+  template:
+    src: backend_server_block
+    dest: /etc/nginx/sites-available/{{ item.key }}
+    mode: 0644
+  with_dict: "{{ sites }}"
+  notify: restart nginx
+
+- name: enable new site
+  file:
+    src: /etc/nginx/sites-available/{{ item.key }}
+    dest: /etc/nginx/sites-enabled/{{ item.key }}
+    state: link
+  with_dict: "{{ sites }}"
+  notify: restart nginx
