@@ -1,2 +1,0 @@
-auth1
-1 sha1 {{ ha_auth_key }}
