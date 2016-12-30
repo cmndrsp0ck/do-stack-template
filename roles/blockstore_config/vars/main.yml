@@ -1,10 +1,7 @@
 ---
 # Enter in the path to your shared directory
 #mnt_dir: /var/mnt/blockstore
-
-# Enter in the owner and group for permission assignment of the mount_dir
-mnt_owner: testuser
-mnt_group: testuser
+mnt_dir: /data/brick/gv01
 
 # default device name
 device: /dev/sda

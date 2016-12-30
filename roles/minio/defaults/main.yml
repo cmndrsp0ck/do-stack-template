@@ -8,7 +8,3 @@ minio_group: minio
 
 minio_storage_dir: /mnt/minio1/storage
 minio_config_dir: /mnt/minio1/config
-
-
-
-

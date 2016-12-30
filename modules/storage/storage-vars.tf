@@ -16,8 +16,9 @@ variable "ssh_fingerprint" {}
 
 variable "public_key" {}
 
+# Enter numeric value in GB's. (e.g. 100)
 variable "volume_size" {}
 
 variable "storage_gateway_size" {
-  default = "2gb"
+  default = "1gb"
 }

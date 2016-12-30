@@ -7,11 +7,11 @@
     state: present
   when: hostvars[item].ipv4_address_private is defined
   with_items: "{{ groups['storage_gateway'] }}"
-  
+
 - name: configure glusterfs ppa
   apt_repository:
     repo: 'ppa:gluster/glusterfs-3.7'
-  
+
 - name: install glusterfs components
   apt:
     name: "{{ item }}"
@@ -21,18 +21,17 @@
   with_items:
     - glusterfs-server
     - glusterfs-client
-# todo: look up glusterfs bricks vs volumes \
-# tomorrow
+
 - name: configure storage volume
   gluster_volume:
     state: present
     name: minio1
     replicas: 2
-    bricks: /gluster-storage
+    bricks: /data/brick/gv01
     force: true
     cluster: "{{ cluster_member_ips }}"
   run_once: true
-   
+
 - name: start gluster volume
   gluster_volume:
     state: started
@@ -46,3 +45,4 @@
     state: mounted
     passno: 2
   with_items: "{{ groups['storage_gateway'] }}"
+  ignore_errors: True
