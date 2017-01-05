@@ -1,6 +1,6 @@
 ---
-caddy_url: https://caddyserver.com/download/build?os=linux&arch=amd64&features=
 minio_url: https://dl.minio.io/server/minio/release/linux-amd64/minio
+minio_host: minio.sippin.com
 
 minio_bin: /usr/local/bin/minio
 minio_user: minio
