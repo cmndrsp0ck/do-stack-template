@@ -21,6 +21,7 @@ http {
 	proxy_http_version 1.1;
 	proxy_set_header Connection "";
 	types_hash_max_size 2048;
+	client_max_body_size 100m;
 	# server_tokens off;
 
 	# server_names_hash_bucket_size 64;

@@ -1,7 +1,7 @@
 # Use modules to build stack
 /*
 module "loadbalance" {
-  source           = "./modules/ha_loadbalancer"
+  source           = "./modules/ha-loadbalancer"
   lb_size          = "2gb"
   project          = "${var.project}"
   region           = "${var.region}"
