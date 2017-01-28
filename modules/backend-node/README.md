@@ -1,6 +1,7 @@
 ## Module Parameters
 
 #### Required
+* node_count
 * project
 * region
 * keys
@@ -9,7 +10,7 @@
 * public_key
 
 #### Optional
-* lb_size -> *(default = 4gb)*
+* node_size -> *(default = 2gb)*
 * image_slug -> *(default = ubuntu-16-04-x64)*
 
 ---
@@ -18,9 +19,10 @@
 
 #### main.tf
 
-    module "loadbalance" {
-      source           = "./modules/ha_loadbalancer"
-      lb_size          = "8gb"
+    module "backend-nodes" {
+      source           = "./modules/backend-node"
+      node_count       = "4"
+      node_size        = "1gb"
       project          = "${var.project}"
       region           = "${var.region}"
       keys             = "${var.keys}"
@@ -29,4 +31,4 @@
       public_key       = "${var.public_key}"
     }
 
-**note**: The module *source* path used depends on how you've set up your directory structure.
+**note**: The module *source* path used depends on how you've set up your directory structure. 

@@ -1,0 +1,1 @@
+{{ hostvars[groups['storage_gateway'][0]].name }} floatip

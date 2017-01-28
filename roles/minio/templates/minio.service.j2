@@ -1,0 +1,30 @@
+[Unit]
+Description=Minio
+After=multi-user.target
+AssertFileIsExecutable=/usr/local/bin/minio
+
+[Service]
+Type=simple
+User=root
+Group=root
+EnvironmentFile=-/etc/default/minio
+
+ExecStart={{ minio_bin }} server --address 127.0.0.1:9000 -C {{ minio_config_dir }} {{ minio_storage_dir }}
+
+Restart=always
+RestartSec=5
+
+StandardOutput=journal
+StandardError=inherit
+
+# Specifies the maximum file descriptor number that can be opened by this process
+LimitNOFILE=65536
+# Disable timeout logic and wait until process is stopped
+TimeoutStopSec=0
+# SIGTERM signal is used to stop Minio
+KillSignal=SIGTERM
+SendSIGKILL=no
+SuccessExitStatus=0
+
+[Install]
+WantedBy=multi-user.target

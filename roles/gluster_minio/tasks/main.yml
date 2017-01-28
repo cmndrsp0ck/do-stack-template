@@ -1,0 +1,48 @@
+---
+- name: build hosts file
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ item }}$'
+    line: "{{ hostvars[item].ipv4_address_private }} {{hostvars[item].name}}"
+    state: present
+  when: hostvars[item].ipv4_address_private is defined
+  with_items: "{{ groups['storage_gateway'] }}"
+
+- name: configure glusterfs ppa
+  apt_repository:
+    repo: 'ppa:gluster/glusterfs-3.7'
+
+- name: install glusterfs components
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items:
+    - glusterfs-server
+    - glusterfs-client
+
+- name: configure storage volume
+  gluster_volume:
+    state: present
+    name: minio1
+    replicas: 2
+    bricks: /data/brick/gv01
+    force: true
+    cluster: "{{ cluster_member_ips }}"
+  run_once: true
+
+- name: start gluster volume
+  gluster_volume:
+    state: started
+    name: minio1
+
+- name: mount gluster volume
+  mount:
+    name: /mnt/minio1
+    src: "{{ hostvars[item].name }}:/minio1"
+    fstype: glusterfs
+    state: mounted
+    passno: 2
+  with_items: "{{ groups['storage_gateway'] }}"
+  ignore_errors: True

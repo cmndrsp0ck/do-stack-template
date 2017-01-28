@@ -1,0 +1,9 @@
+- name: restart minio
+  systemd:
+    name: minio
+    state: restarted
+
+- name: restart nginx
+  systemd:
+    name: nginx
+    state: restarted

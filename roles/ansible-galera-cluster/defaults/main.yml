@@ -28,3 +28,5 @@ galera_check_scripts_port: 9200
 galera_haproxy_user: True
 galera_haproxy_hosts:
   - 127.0.0.1
+  # Finish this variable delaration
+  - "{{ hostvars[groups['galera_lb'][0]]['ipv4_address_private'] }}"

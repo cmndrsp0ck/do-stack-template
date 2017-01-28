@@ -1,31 +1,32 @@
 ---
 - hosts: all
   gather_facts: yes
-  become: true
+  become: True
 
 - hosts: load_balancer
   roles:
     - ansible-haproxy
-  become: true
+  become: True
 
 - hosts: backend_node
   roles:
     - ansible-backend
-  become: true
+  become: True
 
-#- hosts: storage_gateway
-#  roles:
-#    - blockstore_config
-#    - gluster_minio
-#    - minio
-#    - ha
+- hosts: storage_gateway
+  roles:
+    - blockstore_config
+    - gluster_minio
+    - minio
+    - ha-minio
+  become: True
 
 - hosts: galera_lb
   roles:
     - ansible-galera-loadbalancer
-  become: true
+  become: True
 
 - hosts: galera_cluster_node
   roles:
     - ansible-galera-cluster
-  become: true
+  become: True

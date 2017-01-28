@@ -8,7 +8,7 @@
 
 - name: add apt repository
   apt_repository:
-    repo: "deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.1/ubuntu {{ ansible_distribution_release }} main"
+    repo: "deb [arch=amd64,i386,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.1/ubuntu {{ ansible_distribution_release }} main"
     state: present
     update_cache: yes
   tags: apt-add
@@ -23,7 +23,8 @@
   shell: echo "{{ galera_server_package }} mysql-server/root_password password {{ galera_root_password }}" | debconf-set-selections ;
          echo "{{ galera_server_package }} mysql-server/root_password_again password {{ galera_root_password }}" | debconf-set-selections
     executable=/bin/bash
-  when: galera_node_bootstrapped.stat.exists == false
+  when:
+    - galera_node_bootstrapped.stat.exists == false
   tags: debconf
 
 
@@ -64,7 +65,8 @@
   - 127.0.0.1
   - "::1"
   - "{{ galera_haproxy_hosts }}"
-  when: galera_manage_users
+  when:
+    - galera_manage_users
   tags: set-root-pass
 
 - name: set debian-sys-maint password
@@ -76,7 +78,8 @@
     login_password: "{{ galera_root_password }}"
     state: present
     priv: "*.*:ALL"
-  when: galera_manage_users
+  when:
+    - galera_manage_users
   tags: sys-maint
 
 - name: set clustercheck password
@@ -88,13 +91,17 @@
     login_password: "{{ galera_root_password }}"
     state: present
     priv: "*.*:PROCESS"
-  when: galera_manage_users and galera_bootstrap
+  when:
+    - galera_manage_users
+    - galera_bootstrap
   tags: clustercheck-pass
 
 - name: set haproxy (control user) password
   shell:
     mysql -p{{ galera_root_password }} -uroot -e "USE mysql; INSERT IGNORE INTO user (Host,User) values ('{{ item }}','haproxy'); FLUSH PRIVILEGES;"
-  when: galera_manage_users and galera_haproxy_user
+  when:
+    - galera_manage_users
+    - galera_haproxy_user
   with_items: "{{ galera_haproxy_hosts }}"
   changed_when: False
   tags: haproxy-pass
@@ -129,6 +136,8 @@
   notify: restart mysql
   tags: debian-conf
 
+- name: flush handlers
+  meta: flush_handlers
 # percona xtradb scripts
 # and services
 - name: install xinetd
@@ -137,7 +146,8 @@
     state: present
     update_cache: yes
     cache_valid_time: 3600
-  when: galera_check_scripts
+  when:
+    - galera_check_scripts
   tags: xinetd
 
 - name: clustercheck shellscript
@@ -147,7 +157,8 @@
     owner: root
     group: root
     mode: 0755
-  when: galera_check_scripts
+  when:
+    - galera_check_scripts
   tags: clustercheck-script
 
 - name: mysqlchk xinetd
@@ -157,7 +168,8 @@
     owner: root
     group: root
     mode: 0644
-  when: galera_check_scripts
+  when:
+    - galera_check_scripts
   notify: restart xinetd
   tags: mysqlchk
 
@@ -169,42 +181,52 @@
     owner: root
     group: root
     mode: 0644
-  when: galera_check_scripts
+  when:
+    - galera_check_scripts
   notify: restart xinetd
   tags: mysqlchk-service
 
-# To bootstrap a new cluster you need to start the first
-# mysqld server with the option --wsrep-new-cluster on the command line
+# take down mariadb servers without galera_bootstrap host variable set
 - name: stop servers if not bootstrapped
   service:
     name: mysql
     state: stopped
-  when: galera_node_bootstrapped.stat.exists == false
+  when:
+    - not galera_bootstrap
+    - galera_node_bootstrapped.stat.exists == false
+  tags: stop-mariadb
+
+# stop mariadb bootstrap server
+- name: stop servers if not bootstrapped
+  service:
+    name: mysql
+    state: stopped
+  when:
+    - galera_bootstrap
+    - galera_node_bootstrapped.stat.exists == false
   tags: stop-mariadb
 
 - name: bootstrap new cluster master
   shell: galera_new_cluster &
          sleep 10
-  when: galera_bootstrap and galera_node_bootstrapped.stat.exists == false
+  when:
+    - galera_bootstrap
+    - galera_node_bootstrapped.stat.exists == false
   tags: bootstrap-cluster
-
-- name: restart new cluster master
-  service:
-    name: mysql
-    state: restarted
-  when: galera_bootstrap and galera_node_bootstrapped.stat.exists == false
-  tags: restart-master
 
 - name: restart new added nodes
   service:
     name: mysql
     state: restarted
-  when: not galera_bootstrap and galera_node_bootstrapped.stat.exists == false
+  when:
+    - not galera_bootstrap
+    - galera_node_bootstrapped.stat.exists == false
   tags: restart-added-nodes
 
 - name: create bootstrap file
   file:
     path: /etc/mysql/galera_node_bootstrapped
     state: touch
-  when: galera_node_bootstrapped.stat.exists == false
+  when:
+    - galera_node_bootstrapped.stat.exists == false
   tags: touch-bootstrapped

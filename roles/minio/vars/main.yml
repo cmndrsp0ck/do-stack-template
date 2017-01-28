@@ -1,0 +1,6 @@
+sites:
+  minio1:
+    server_name: minio.sippin.com
+
+minio_access_key: "{{ vault_minio_access_key }}"
+minio_secret_key: "{{ vault_minio_secret_key }}"
