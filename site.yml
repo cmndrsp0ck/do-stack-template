@@ -3,15 +3,15 @@
   gather_facts: yes
   become: True
 
-#- hosts: load_balancer
-#  roles:
-#    - ansible-haproxy
-#  become: True
-#
-#- hosts: backend_node
-#  roles:
-#    - ansible-backend
-#  become: True
+- hosts: load_balancer
+  roles:
+    - ansible-haproxy
+  become: True
+
+- hosts: backend_node
+  roles:
+    - ansible-backend
+  become: True
 
 - hosts: storage_gateway
   roles:
@@ -21,12 +21,12 @@
     - ha-minio
   become: True
 
-#- hosts: galera_lb
-#  roles:
-#    - ansible-galera-loadbalancer
-#  become: True
-#
-#- hosts: galera_cluster_node
-#  roles:
-#    - ansible-galera-cluster
-#  become: True
+- hosts: galera_lb
+  roles:
+    - ansible-galera-loadbalancer
+  become: True
+
+- hosts: galera_cluster_node
+  roles:
+    - ansible-galera-cluster
+  become: True

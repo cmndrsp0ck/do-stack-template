@@ -1,5 +1,5 @@
 # Use modules to build stack
-/*
+
 module "loadbalance" {
   source           = "./modules/ha-loadbalancer"
   lb_size          = "2gb"
@@ -12,7 +12,7 @@ module "loadbalance" {
 }
 
 module "backend-nodes" {
-  source           = "./modules/backend_node"
+  source           = "./modules/backend-node"
   node_count       = "2"
   node_size        = "1gb"
   project          = "${var.project}"
@@ -32,7 +32,7 @@ module "galera-cluster" {
   ssh_fingerprint  = "${var.ssh_fingerprint}"
   public_key       = "${var.public_key}"
 }
-*/
+
 
 module "block-store" {
   source           = "./modules/storage"
@@ -44,3 +44,5 @@ module "block-store" {
   public_key       = "${var.public_key}"
   volume_size      = "100"
 }
+
+

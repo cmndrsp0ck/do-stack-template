@@ -10,7 +10,7 @@
 
 - name: configure heartbeat
   template:
-    src: ha.cf
+    src: ha.cf.j2
     dest: /etc/ha.d/ha.cf
     mode: 0644
 
@@ -20,7 +20,7 @@
     dest: /etc/ha.d/authkeys
     mode: 0600
 
-- name: configurea haresources
+- name: configure haresources
   template:
     src: haresources
     dest: /etc/ha.d/haresources
